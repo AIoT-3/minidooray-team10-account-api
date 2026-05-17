@@ -5,6 +5,7 @@ import com.nhnacademy.accountapi.dto.MemberNameResponse;
 import com.nhnacademy.accountapi.dto.MemberUpdateRequest;
 import com.nhnacademy.accountapi.dto.MembersResponse;
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.service.MemberQueryService;
 import com.nhnacademy.accountapi.service.MemberService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -36,7 +38,7 @@ public class MemberController {
     //회원정보조회
     @GetMapping("/members")
     public ResponseEntity<MembersResponse> getMembers(@RequestHeader(name = "memberId") @Positive long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberQueryService.getMember(memberId);
 
         return ResponseEntity.ok(new MembersResponse(member.getEmail(), member.getPassword(), member.getName(), member.getStatus()));
     }
@@ -69,7 +71,7 @@ public class MemberController {
     //회원이름반환
     @GetMapping("/member")
     public ResponseEntity<MemberNameResponse> getMemberName(@RequestHeader(name = "memberId") @Positive long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberQueryService.getMember(memberId);
 
         return ResponseEntity.ok(new MemberNameResponse(member.getName()));
     }

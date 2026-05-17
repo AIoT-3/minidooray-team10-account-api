@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://220.67.216.14:13306/nhn_academy_43
+    username: nhn_academy_43
+    password: nBsX6gXJ7loHtMn/
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  application:
+    name: member
+server:
+  port: 8081

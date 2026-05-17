@@ -1,36 +1,22 @@
-package com.nhnacademy.accountapi.service.Impl;
+package com.nhnacademy.accountapi.service.impl;
 
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.exception.DuplicateEmailException;
-import com.nhnacademy.accountapi.exception.MemberNotFoundException;
+import com.nhnacademy.accountapi.exception.MemberAlreadyTerminateException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
+import com.nhnacademy.accountapi.service.MemberQueryService;
 import com.nhnacademy.accountapi.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-
-    @Transactional(readOnly = true)
-    @Override
-    public Member getMember(long id) {
-
-        Optional<Member> member = memberRepository.findById(id);
-
-        if (member.isEmpty()) {
-            throw new MemberNotFoundException("존재하지 않는 사용자 입니다.");
-        }
-
-        return member.get();
-    }
+    private final MemberQueryService memberQueryService;
 
     @Transactional
     @Override
@@ -45,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void updateMember(long id, String password, String name) {
-        Member member = getMember(id);
+        Member member = memberQueryService.getMember(id);
 
         member.updatePassword(password);
         member.updateName(name);
@@ -54,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void deleteMember(long id) {
-        Member member = getMember(id);
+        Member member = memberQueryService.getMember(id);
 
         member.updateStatus(Status.TERMINATE);
     }
@@ -62,7 +48,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void disableMember(long id) {
-        Member member = getMember(id);
+        Member member = memberQueryService.getMember(id);
+
+        if (Status.TERMINATE == member.getStatus()) {
+            throw new MemberAlreadyTerminateException("탈퇴한 회원 입니다.");
+        }
 
         member.updateStatus(Status.SLEEP);
     }
@@ -70,7 +60,11 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public void activateMember(long id) {
-        Member member = getMember(id);
+        Member member = memberQueryService.getMember(id);
+
+        if (Status.TERMINATE == member.getStatus()) {
+            throw new MemberAlreadyTerminateException("탈퇴한 회원 입니다.");
+        }
 
         member.updateStatus(Status.ACTIVE);
     }

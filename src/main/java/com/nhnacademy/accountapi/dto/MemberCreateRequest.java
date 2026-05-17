@@ -11,7 +11,7 @@ public record MemberCreateRequest(
         String email,
         @NotBlank
         @Pattern(
-                regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,20}$"
+                regexp = "^(?=.*[a-z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,20}$"
         )
         String password,
         @NotBlank
