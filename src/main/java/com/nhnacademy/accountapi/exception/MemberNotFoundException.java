@@ -1,7 +1,7 @@
 package com.nhnacademy.accountapi.exception;
 
-public class MemberNotFoundException extends NotFoundException {
-    public MemberNotFoundException(String message) {
-        super(message);
+public class MemberNotFoundException extends BaseException {
+    public MemberNotFoundException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

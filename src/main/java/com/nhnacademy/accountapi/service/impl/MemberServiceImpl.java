@@ -3,6 +3,7 @@ package com.nhnacademy.accountapi.service.impl;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.exception.DuplicateEmailException;
+import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberAlreadyTerminateException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
 import com.nhnacademy.accountapi.service.MemberQueryService;
@@ -22,7 +23,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void createMember(String email, String password, String name) {
         if (memberRepository.existsMemberByEmail(email)) {
-            throw new DuplicateEmailException("이미 존재하는 이메일입니다.");
+            throw new DuplicateEmailException(ErrorCode.DUPLICATE_EMAIL);
         }
 
         memberRepository.save(new Member(email, password, name));
@@ -51,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberQueryService.getMember(id);
 
         if (Status.TERMINATE == member.getStatus()) {
-            throw new MemberAlreadyTerminateException("탈퇴한 회원 입니다.");
+            throw new MemberAlreadyTerminateException(ErrorCode.MEMBER_TERMINATED);
         }
 
         member.updateStatus(Status.SLEEP);
@@ -63,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberQueryService.getMember(id);
 
         if (Status.TERMINATE == member.getStatus()) {
-            throw new MemberAlreadyTerminateException("탈퇴한 회원 입니다.");
+            throw new MemberAlreadyTerminateException(ErrorCode.MEMBER_TERMINATED);
         }
 
         member.updateStatus(Status.ACTIVE);

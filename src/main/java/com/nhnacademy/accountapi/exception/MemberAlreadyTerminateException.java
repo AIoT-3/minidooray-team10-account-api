@@ -1,7 +1,7 @@
 package com.nhnacademy.accountapi.exception;
 
-public class MemberAlreadyTerminateException extends RuntimeException {
-    public MemberAlreadyTerminateException(String message) {
-        super(message);
+public class MemberAlreadyTerminateException extends BaseException {
+    public MemberAlreadyTerminateException(ErrorCode errorCode) {
+        super(errorCode);
     }
 }

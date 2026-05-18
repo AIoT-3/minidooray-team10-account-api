@@ -1,6 +1,7 @@
 package com.nhnacademy.accountapi.service.impl;
 
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
 import com.nhnacademy.accountapi.service.MemberQueryService;
@@ -22,7 +23,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         Optional<Member> member = memberRepository.findById(id);
 
         if (member.isEmpty()) {
-            throw new MemberNotFoundException("존재하지 않는 사용자 입니다.");
+            throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
         }
 
         return member.get();
