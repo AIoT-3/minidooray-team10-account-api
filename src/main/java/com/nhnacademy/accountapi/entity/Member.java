@@ -23,7 +23,7 @@ public class Member {
     private String email;
 
     @NotBlank
-    @Column(length = 50, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
     @NotBlank
     @Column(length = 20, nullable = false)
