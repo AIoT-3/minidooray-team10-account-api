@@ -58,7 +58,7 @@ public class MemberController {
     public ResponseEntity<Void> updateMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId,
                                               @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
         memberService.updateMember(memberId,
-                passwordEncoder.encode(memberUpdateRequest.password()),
+                memberUpdateRequest.password(),
                 memberUpdateRequest.name());
 
         return ResponseEntity.ok().build();

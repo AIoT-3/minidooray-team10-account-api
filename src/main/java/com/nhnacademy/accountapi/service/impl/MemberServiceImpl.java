@@ -1,6 +1,5 @@
 package com.nhnacademy.accountapi.service.impl;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.exception.DuplicateEmailException;
@@ -10,6 +9,7 @@ import com.nhnacademy.accountapi.repository.MemberRepository;
 import com.nhnacademy.accountapi.service.MemberQueryService;
 import com.nhnacademy.accountapi.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,6 +20,8 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberQueryService memberQueryService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -41,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         if (StringUtils.hasText(password)) {
-            member.updatePassword(password);
+            member.updatePassword(passwordEncoder.encode(password));
         }
         if (StringUtils.hasText(name)) {
             member.updateName(name);

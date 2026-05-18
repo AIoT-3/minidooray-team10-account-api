@@ -6,7 +6,6 @@ import com.nhnacademy.accountapi.exception.dto.ErrorResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,7 +23,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errorCode.getStatus().value(), errorCode.getCode(), errorCode.getMessage()));
     }
 
-    //커스텀 외의 exception은 어디서 처리하는게 맞는지
     @ExceptionHandler({ConstraintViolationException.class, HandlerMethodValidationException.class})
     protected ResponseEntity<ErrorResponse> handleNotValidHeaderException(Exception e) {
         ErrorCode errorCode = ErrorCode.NOT_VALID_PARAMETER;
