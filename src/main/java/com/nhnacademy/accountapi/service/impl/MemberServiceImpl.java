@@ -34,6 +34,10 @@ public class MemberServiceImpl implements MemberService {
     public void updateMember(long id, String password, String name) {
         Member member = memberQueryService.getMember(id);
 
+        if (Status.TERMINATE == member.getStatus()) {
+            throw new MemberAlreadyTerminateException(ErrorCode.MEMBER_TERMINATED);
+        }
+
         member.updatePassword(password);
         member.updateName(name);
     }
