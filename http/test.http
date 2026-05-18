@@ -1,4 +1,4 @@
-### 회원가입
+### 회원가입 - 성공
 POST localhost:8081/api/signup
 Content-Type: application/json
 
@@ -21,8 +21,7 @@ Content-Type: application/json
 X-USER-ID: 1
 
 {
-  "password": "test12345!",
-  "name": "test1"
+  "password": "test1234!@"
 }
 
 ### 회원 정보 수정 - name
@@ -31,7 +30,6 @@ Content-Type: application/json
 X-USER-ID: 1
 
 {
-  "password": "test12345@",
   "name": "test101"
 }
 

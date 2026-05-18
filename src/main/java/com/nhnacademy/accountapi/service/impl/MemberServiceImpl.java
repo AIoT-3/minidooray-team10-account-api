@@ -1,5 +1,6 @@
 package com.nhnacademy.accountapi.service.impl;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.exception.DuplicateEmailException;
@@ -11,6 +12,7 @@ import com.nhnacademy.accountapi.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -38,8 +40,12 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberAlreadyTerminateException(ErrorCode.MEMBER_TERMINATED);
         }
 
-        member.updatePassword(password);
-        member.updateName(name);
+        if (StringUtils.hasText(password)) {
+            member.updatePassword(password);
+        }
+        if (StringUtils.hasText(name)) {
+            member.updateName(name);
+        }
     }
 
     @Transactional
