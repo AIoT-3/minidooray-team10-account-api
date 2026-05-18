@@ -53,4 +53,13 @@ class MemberRepositoryTest {
         assertThat(memberRepository.existsMemberByEmail(member.getEmail())).isTrue();
         assertThat(memberRepository.existsMemberByEmail("abcd@test.com")).isFalse();
     }
+
+    @Test
+    @DisplayName("회원 이메일일로 찾기 테스트")
+    void findMemberByEmailSuccessTest() {
+        Optional<Member> findMember = memberRepository.findMemberByEmail(member.getEmail());
+
+        assertThat(findMember).isNotNull();
+        assertThat(findMember.get().getEmail()).isEqualTo(member.getEmail());
+    }
 }

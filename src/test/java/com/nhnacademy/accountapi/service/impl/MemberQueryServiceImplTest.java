@@ -1,6 +1,8 @@
 package com.nhnacademy.accountapi.service.impl;
 
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.exception.BaseException;
+import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -43,8 +44,15 @@ class MemberQueryServiceImplTest {
     void getMemberFailTest() {
         when(memberRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> memberQueryService.getMember(1L))
-                .isInstanceOf(MemberNotFoundException.class)
-                .hasMessage("존재하지 않는 사용자 입니다.");
+        Throwable throwable = catchThrowable(() -> memberQueryService.getMember(1L));
+
+        assertThat(throwable).isInstanceOf(MemberNotFoundException.class);
+        assertThat(((BaseException) throwable).getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName("email로 찾기 성공 테스트")
+    void getMemberByEmailSuccessTest() {
+
     }
 }

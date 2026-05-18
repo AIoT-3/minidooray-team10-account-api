@@ -29,6 +29,7 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return member.get();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Member getMemberByEmail(String email) {
         Optional<Member> member = memberRepository.findMemberByEmail(email);

@@ -1,8 +1,47 @@
-GET localhost:8081/api/signup
+### 회원가입
+POST localhost:8081/api/signup
 Content-Type: application/json
 
 {
-    "email": "test@test.com",
-    "password": "test1234!",
-    "name": "test"
+    "email": "test100@test.com",
+    "password": "test12345!",
+    "name": "test100"
 }
+
+### 회원 로그인 조회
+GET localhost:8081/api/account?email=test100@test.com
+
+### 회원 정보 조회
+GET localhost:8081/api/members
+X-USER-ID: 1
+
+### 회원 정보 수정 - password
+PUT localhost:8081/api/members
+Content-Type: application/json
+X-USER-ID: 1
+
+{
+  "password": "test12345@",
+  "name": "test100"
+}
+
+### 회원 정보 수정 - name
+PUT localhost:8081/api/members
+Content-Type: application/json
+X-USER-ID: 1
+
+{
+  "password": "test12345@",
+  "name": "test101"
+}
+
+### 휴면 해제
+PUT localhost:8081/api/members/1/active
+
+### 회원 탈퇴
+DELETE localhost:8081/api/members
+X-USER-ID: 1
+
+### 회원이름반환
+GET localhost:8081/api/member
+X-USER-ID: 1

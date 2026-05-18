@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private static final String HEADERUSERID = "X-USER-ID";
+
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
 
@@ -33,27 +35,37 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    //회원로그인
+    //회원로그인조회
     @GetMapping("/account")
     public ResponseEntity<MemberLoginResponse> loginMember(@RequestParam @Email String email) {
         Member member = memberQueryService.getMemberByEmail(email);
 
-        return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getName(), member.getStatus()));
+        return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getPassword(), member.getStatus()));
     }
 
     //회원정보조회
     @GetMapping("/members")
-    public ResponseEntity<MembersResponse> getMembers(@RequestHeader(name = "memberId") @Positive long memberId) {
+    public ResponseEntity<MembersResponse> getMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         Member member = memberQueryService.getMember(memberId);
 
-        return ResponseEntity.ok(new MembersResponse(member.getEmail(), member.getPassword(), member.getName(), member.getStatus()));
+        return ResponseEntity.ok(new MembersResponse(member.getEmail(), member.getName()));
     }
 
     //회원정보수정
     @PutMapping("/members")
-    public ResponseEntity<Void> updateMembers(@RequestHeader(name = "memberId") @Positive long memberId,
+    public ResponseEntity<Void> updateMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId,
                                               @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
-        memberService.updateMember(memberId, memberUpdateRequest.password(), memberUpdateRequest.name());
+        memberService.updateMember(memberId,
+                passwordEncoder.encode(memberUpdateRequest.password()),
+                memberUpdateRequest.name());
+
+        return ResponseEntity.ok().build();
+    }
+
+    //휴면전환
+    @PutMapping("/members/{memberId}/inactive")
+    public ResponseEntity<Void> inactiveMembers(@PathVariable(name = "memberId") @Positive long memberId) {
+        memberService.disableMember(memberId);
 
         return ResponseEntity.ok().build();
     }
@@ -68,7 +80,7 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping("/members")
-    public ResponseEntity<Void> deleteMembers(@RequestHeader(name = "memberId") @Positive long memberId) {
+    public ResponseEntity<Void> deleteMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         memberService.deleteMember(memberId);
 
         return ResponseEntity.noContent().build();
@@ -76,7 +88,7 @@ public class MemberController {
 
     //회원이름반환
     @GetMapping("/member")
-    public ResponseEntity<MemberNameResponse> getMemberName(@RequestHeader(name = "memberId") @Positive long memberId) {
+    public ResponseEntity<MemberNameResponse> getMemberName(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         Member member = memberQueryService.getMember(memberId);
 
         return ResponseEntity.ok(new MemberNameResponse(member.getName()));
