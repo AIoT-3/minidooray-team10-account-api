@@ -2,7 +2,9 @@ package com.nhnacademy.accountapi.service.impl;
 
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
+import com.nhnacademy.accountapi.exception.BaseException;
 import com.nhnacademy.accountapi.exception.DuplicateEmailException;
+import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,15 +68,16 @@ class MemberServiceImplTest {
         assertThat(member.getName()).isEqualTo("test1234");
     }
 
-//    @Test
-//    @DisplayName("update 실패 테스트")
-//    void updateFailTest() {
-//        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException("존재하지 않는 사용자 입니다."));
-//
-//        assertThatThrownBy(() -> memberService.updateMember(1L, "test1234@", "test1234"))
-//                .isInstanceOf(MemberNotFoundException.class)
-//                .hasMessage("존재하지 않는 사용자 입니다.");
-//    }
+    @Test
+    @DisplayName("update 실패 테스트")
+    void updateFailTest() {
+        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Throwable throwable = catchThrowable(() -> memberService.updateMember(1L, "test1234@", "test1234"));
+
+        assertThat(throwable).isInstanceOf(MemberNotFoundException.class);
+        assertThat(((BaseException) throwable).getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+    }
 
     @Test
     @DisplayName("delete 성공 테스트")
@@ -88,15 +90,16 @@ class MemberServiceImplTest {
         assertThat(member.getStatus()).isEqualTo(Status.TERMINATE);
     }
 
-//    @Test
-//    @DisplayName("delete 실패 테스트")
-//    void deleteFailTest() {
-//        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException("존재하지 않는 사용자 입니다."));
-//
-//        assertThatThrownBy(() -> memberService.deleteMember(1L))
-//                .isInstanceOf(MemberNotFoundException.class)
-//                .hasMessage("존재하지 않는 사용자 입니다.");
-//    }
+    @Test
+    @DisplayName("delete 실패 테스트")
+    void deleteFailTest() {
+        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Throwable throwable = catchThrowable(() -> memberService.deleteMember(1L));
+
+        assertThat(throwable).isInstanceOf(MemberNotFoundException.class);
+        assertThat(((BaseException) throwable).getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+    }
 
     @Test
     @DisplayName("disable 성공 테스트")
@@ -108,15 +111,16 @@ class MemberServiceImplTest {
         assertThat(member.getStatus()).isEqualTo(Status.SLEEP);
     }
 
-//    @Test
-//    @DisplayName("disable 실패 테스트")
-//    void disableFailTest() {
-//        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException("존재하지 않는 사용자 입니다."));
-//
-//        assertThatThrownBy(() -> memberService.disableMember(1L))
-//                .isInstanceOf(MemberNotFoundException.class)
-//                .hasMessage("존재하지 않는 사용자 입니다.");
-//    }
+    @Test
+    @DisplayName("disable 실패 테스트")
+    void disableFailTest() {
+        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Throwable throwable = catchThrowable(() -> memberService.disableMember(1L));
+
+        assertThat(throwable).isInstanceOf(MemberNotFoundException.class);
+        assertThat(((BaseException) throwable).getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+    }
 
     @Test
     @DisplayName("activate 성공 테스트")
@@ -129,13 +133,14 @@ class MemberServiceImplTest {
         assertThat(member.getStatus()).isEqualTo(Status.ACTIVE);
     }
 
-//    @Test
-//    @DisplayName("disable 실패 테스트")
-//    void activateFailTest() {
-//        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException("존재하지 않는 사용자 입니다."));
-//
-//        assertThatThrownBy(() -> memberService.activateMember(1L))
-//                .isInstanceOf(MemberNotFoundException.class)
-//                .hasMessage("존재하지 않는 사용자 입니다.");
-//    }
+    @Test
+    @DisplayName("disable 실패 테스트")
+    void activateFailTest() {
+        when(memberQueryService.getMember(1L)).thenThrow(new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND));
+
+        Throwable throwable = catchThrowable(() -> memberService.activateMember(1L));
+
+        assertThat(throwable).isInstanceOf(MemberNotFoundException.class);
+        assertThat(((BaseException) throwable).getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+    }
 }

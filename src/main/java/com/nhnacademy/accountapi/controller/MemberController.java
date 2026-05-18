@@ -35,10 +35,10 @@ public class MemberController {
 
     //회원로그인
     @GetMapping("/account")
-    public ResponseEntity<MemberLoginResponse> loginMember(@PathVariable(value = "email") @Email String email) {
+    public ResponseEntity<MemberLoginResponse> loginMember(@RequestParam @Email String email) {
         Member member = memberQueryService.getMemberByEmail(email);
 
-        return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getName()));
+        return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getName(), member.getStatus()));
     }
 
     //회원정보조회
