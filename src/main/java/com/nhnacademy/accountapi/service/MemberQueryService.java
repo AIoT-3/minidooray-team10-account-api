@@ -6,4 +6,5 @@ public interface MemberQueryService {
 
     Member getMember(long id);
 
+    Member getMemberByEmail(String email);
 }

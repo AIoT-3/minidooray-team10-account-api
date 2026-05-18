@@ -6,7 +6,7 @@ spring:
     password: nBsX6gXJ7loHtMn/
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: true
 
   application:

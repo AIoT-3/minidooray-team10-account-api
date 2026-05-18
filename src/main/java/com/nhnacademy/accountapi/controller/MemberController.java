@@ -1,13 +1,11 @@
 package com.nhnacademy.accountapi.controller;
 
-import com.nhnacademy.accountapi.dto.MemberCreateRequest;
-import com.nhnacademy.accountapi.dto.MemberNameResponse;
-import com.nhnacademy.accountapi.dto.MemberUpdateRequest;
-import com.nhnacademy.accountapi.dto.MembersResponse;
+import com.nhnacademy.accountapi.dto.*;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.service.MemberQueryService;
 import com.nhnacademy.accountapi.service.MemberService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +31,14 @@ public class MemberController {
                 memberCreateRequest.name());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    //회원로그인
+    @GetMapping("/account")
+    public ResponseEntity<MemberLoginResponse> loginMember(@PathVariable(value = "email") @Email String email) {
+        Member member = memberQueryService.getMemberByEmail(email);
+
+        return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getName()));
     }
 
     //회원정보조회

@@ -28,4 +28,15 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
         return member.get();
     }
+
+    @Override
+    public Member getMemberByEmail(String email) {
+        Optional<Member> member = memberRepository.findMemberByEmail(email);
+
+        if (member.isEmpty()) {
+            throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        return member.get();
+    }
 }
