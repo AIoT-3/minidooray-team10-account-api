@@ -23,6 +23,9 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
+    //test2@email.com
+    //1234qwer!
+
     @Transactional
     @Override
     public void createMember(String email, String password, String name) {

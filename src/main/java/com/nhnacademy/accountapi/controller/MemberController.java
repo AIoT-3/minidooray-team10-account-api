@@ -64,14 +64,6 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    //휴면전환
-    @PutMapping("/members/{memberId}/inactive")
-    public ResponseEntity<Void> inactiveMembers(@PathVariable(name = "memberId") @Positive long memberId) {
-        memberService.disableMember(memberId);
-
-        return ResponseEntity.ok().build();
-    }
-
     //휴면해제
     @PutMapping("/members/{memberId}/active")
     public ResponseEntity<Void> activeMembers(@PathVariable(name = "memberId") @Positive long memberId) {
