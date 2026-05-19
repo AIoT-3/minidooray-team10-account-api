@@ -75,8 +75,8 @@ public class MemberController {
     }
 
     //휴면해제
-    @PutMapping("/members/{memberId}/active")
-    public ResponseEntity<Void> activeMembers(@PathVariable(name = "memberId") @Positive long memberId) {
+    @PutMapping("/members/{member-id}/active")
+    public ResponseEntity<Void> activeMembers(@PathVariable(name = "member-id") @Positive long memberId) {
         memberService.activateMember(memberId);
 
         return ResponseEntity.noContent().build();  //noContent()
