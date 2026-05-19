@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @Validated
 @RestController
 @RequestMapping("/api")
@@ -43,6 +45,14 @@ public class MemberController {
         Member member = memberQueryService.getMemberByEmail(email);
 
         return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getPassword(), member.getStatus()));
+    }
+
+    //로그인 성공
+    @PatchMapping("/account/me")
+    public ResponseEntity<Void> loginMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
+        memberService.updateLastLoginAt(memberId);
+
+        return ResponseEntity.ok().build();
     }
 
     //회원정보조회

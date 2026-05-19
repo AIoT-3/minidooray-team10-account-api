@@ -15,6 +15,10 @@ GET localhost:8081/api/account?email=test1@test.com
 GET localhost:8081/api/members
 X-USER-ID: 1
 
+### 로그인 성공 및 최근 로그인 시간 수정
+PATCH localhost:8081/api/account/me
+X-USER-ID: 1
+
 ### 회원 정보 수정 - password
 PUT localhost:8081/api/members
 Content-Type: application/json

@@ -10,4 +10,6 @@ public interface MemberService {
     void disableMember(long id);
 
     void activateMember(long id);
+
+    void updateLastLoginAt(long id);
 }

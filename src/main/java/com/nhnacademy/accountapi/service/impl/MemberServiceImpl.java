@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
@@ -22,9 +24,6 @@ public class MemberServiceImpl implements MemberService {
     private final MemberQueryService memberQueryService;
 
     private final PasswordEncoder passwordEncoder;
-
-    //test2@email.com
-    //1234qwer!
 
     @Transactional
     @Override
@@ -83,5 +82,17 @@ public class MemberServiceImpl implements MemberService {
         }
 
         member.updateStatus(Status.ACTIVE);
+    }
+
+    @Transactional
+    @Override
+    public void updateLastLoginAt(long id) {
+        Member member = memberQueryService.getMember(id);
+
+        if (Status.TERMINATE == member.getStatus()) {
+            throw new MemberAlreadyTerminateException(ErrorCode.MEMBER_TERMINATED);
+        }
+
+        member.updateLastLoginAt(LocalDateTime.now());
     }
 }
