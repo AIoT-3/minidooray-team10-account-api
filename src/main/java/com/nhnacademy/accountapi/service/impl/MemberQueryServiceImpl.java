@@ -2,7 +2,9 @@ package com.nhnacademy.accountapi.service.impl;
 
 import com.nhnacademy.accountapi.dto.MemberIdNameResponse;
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.exception.ErrorCode;
+import com.nhnacademy.accountapi.exception.MemberNotActiveException;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
 import com.nhnacademy.accountapi.repository.MemberRepository;
 import com.nhnacademy.accountapi.service.MemberQueryService;
@@ -39,6 +41,18 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
         if (member.isEmpty()) {
             throw new MemberNotFoundException(ErrorCode.MEMBER_NOT_FOUND);
+        }
+
+        return member.get();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Member getMemberByEmailAndStatus(String email, Status status) {
+        Optional<Member> member = memberRepository.findMEmberByEmailAndStatus(email, status);
+
+        if (member.isEmpty()) {
+            throw new MemberNotActiveException(ErrorCode.MEMBER_NOT_ACTIVE);
         }
 
         return member.get();

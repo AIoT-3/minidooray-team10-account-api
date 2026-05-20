@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 class MemberTest {
 
     @Test
-    @DisplayName("new Member Test")
-    void newMemberTest() {
+    @DisplayName("Member 생성 성공")
+    void newMemberSuccessTest() {
         Member member = new Member("test@test.com", "test1234!", "test");
 
         Assertions.assertEquals("test@test.com", member.getEmail());
@@ -20,7 +20,7 @@ class MemberTest {
     }
 
     @Test
-    @DisplayName("update Test")
+    @DisplayName("Member 업데아트")
     void updateMemberTest() {
         Member member = new Member("test@test.com", "test1234!", "test");
 

@@ -2,6 +2,7 @@ package com.nhnacademy.accountapi.controller;
 
 import com.nhnacademy.accountapi.dto.*;
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.entity.Status;
 import com.nhnacademy.accountapi.service.MemberQueryService;
 import com.nhnacademy.accountapi.service.MemberService;
 import jakarta.validation.Valid;
@@ -47,6 +48,24 @@ public class MemberController {
         return ResponseEntity.ok(new MemberLoginResponse(member.getId(), member.getEmail(), member.getPassword(), member.getStatus()));
     }
 
+    //회원 리스트 반환
+    @PostMapping("/members/batch")
+    public ResponseEntity<MemberListResponse> getMemberList(@RequestBody @Valid MemberIdNameRequest memberListRequestIdName) {
+        List<MemberIdNameResponse> memberIdNameResponseList = memberQueryService.getMembersListById(memberListRequestIdName.ids());
+
+        MemberListResponse memberListResponse = new MemberListResponse(memberIdNameResponseList);
+
+        return ResponseEntity.ok(memberListResponse);
+    }
+
+    //회원 id반환
+    @PostMapping("/members/id")
+    public ResponseEntity<MemberIdResponse> getMemberById(@RequestBody @Valid MemberEmailRequest memberEmailRequest) {
+        Member member = memberQueryService.getMemberByEmailAndStatus(memberEmailRequest.getEmail(), Status.ACTIVE);
+
+        return ResponseEntity.ok(new MemberIdResponse(member.getId()));
+    }
+
     //로그인 성공
     @PatchMapping("/members/me")
     public ResponseEntity<Void> loginMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
@@ -64,8 +83,6 @@ public class MemberController {
     }
 
     //회원정보수정
-    // /api/members/{member-id}
-    // /api/members/me  id가 되는게 그러면 이렇게
     @PutMapping("/members/me")
     public ResponseEntity<Void> updateMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId,
                                               @RequestBody @Valid MemberUpdateRequest memberUpdateRequest) {
@@ -85,9 +102,6 @@ public class MemberController {
     }
 
     //회원탈퇴
-    // /api/members/{member-id}/withdraw
-    // 메소드로 표현하기 애매한건 url에 넣어줘도됨
-    // /api/members/me/withdraw
     @DeleteMapping("/members/me/withdraw")
     public ResponseEntity<Void> deleteMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         memberService.deleteMember(memberId);
@@ -96,32 +110,10 @@ public class MemberController {
     }
 
     //회원이름반환
-    // /api/members/{member-id}/name
-    // /api/members/me/name
     @GetMapping("/members/me/name")
     public ResponseEntity<MemberNameResponse> getMemberName(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         Member member = memberQueryService.getMember(memberId);
 
         return ResponseEntity.ok(new MemberNameResponse(member.getName()));
-    }
-
-    //회원 리스트 반환
-    @PostMapping("/members/batch")
-    public ResponseEntity<MemberListResponse> getMemberList(@RequestBody @Valid MemberIdNameRequest memberListRequestIdName) {
-        List<MemberIdNameResponse> memberIdNameResponseList = memberQueryService.getMembersListById(memberListRequestIdName.ids());
-
-        MemberListResponse memberListResponse = new MemberListResponse(memberIdNameResponseList);
-
-        return ResponseEntity.ok(memberListResponse);
-    }
-
-    //회원 id반환
-    @PostMapping("/members/id")
-    public ResponseEntity<MemberIdResponse> getMemberById(@RequestBody @Valid MemberEmailRequest memberEmailRequest) {
-        Member member = memberQueryService.getMemberByEmail(memberEmailRequest.getEmail());
-
-        MemberIdResponse memberIdResponse = new MemberIdResponse(member.getId());
-
-        return ResponseEntity.ok(memberIdResponse);
     }
 }

@@ -2,6 +2,7 @@ package com.nhnacademy.accountapi.repository;
 
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
@@ -15,4 +16,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberByEmail(String email);
 
     List<Member> findMembersByLastLoginAtBeforeAndStatus(LocalDateTime localDateTime, Status status);
+
+    Optional<Member> findMEmberByEmailAndStatus(String email, Status status);
 }

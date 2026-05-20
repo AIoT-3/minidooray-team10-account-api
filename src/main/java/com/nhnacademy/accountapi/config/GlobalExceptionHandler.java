@@ -15,6 +15,7 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    //CustomException
     @ExceptionHandler(BaseException.class)
     protected ResponseEntity<ErrorResponse> handleBaseException(BaseException e) {
         ErrorCode errorCode = e.getErrorCode();
@@ -23,6 +24,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errorCode.getStatus().value(), errorCode.getCode(), errorCode.getMessage()));
     }
 
+    //Header Valid Fail Exception
     @ExceptionHandler({ConstraintViolationException.class, HandlerMethodValidationException.class})
     protected ResponseEntity<ErrorResponse> handleNotValidHeaderException(Exception e) {
         ErrorCode errorCode = ErrorCode.NOT_VALID_PARAMETER;
@@ -31,6 +33,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errorCode.getStatus().value(), errorCode.getCode(), errorCode.getMessage()));
     }
 
+    // Body Valid Fail Exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleNotValidBodyException(Exception e) {
         ErrorCode errorCode = ErrorCode.NOT_VALID_BODY;
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(errorCode.getStatus().value(), errorCode.getCode(), errorCode.getMessage()));
     }
 
+    //Others
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         ErrorCode errorCode = ErrorCode.UNHANDLED_EXCEPTION;
