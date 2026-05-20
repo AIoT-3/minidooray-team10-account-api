@@ -1,7 +1,8 @@
 package com.nhnacademy.accountapi.dto;
 
+import java.util.List;
+
 public record MemberListResponse (
-    Long id,
-    String name
+    List<MemberIdNameResponse> data
 ) {
 }

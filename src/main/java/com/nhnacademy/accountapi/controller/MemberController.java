@@ -57,10 +57,10 @@ public class MemberController {
 
     //회원정보조회
     @GetMapping("/members/me")
-    public ResponseEntity<MembersResponse> getMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
+    public ResponseEntity<MembersEmailNameResponse> getMembers(@RequestHeader(name = HEADERUSERID) @Positive long memberId) {
         Member member = memberQueryService.getMember(memberId);
 
-        return ResponseEntity.ok(new MembersResponse(member.getEmail(), member.getName()));
+        return ResponseEntity.ok(new MembersEmailNameResponse(member.getEmail(), member.getName()));
     }
 
     //회원정보수정
@@ -107,10 +107,12 @@ public class MemberController {
 
     //회원 리스트 반환
     @PostMapping("/members/batch")
-    public ResponseEntity<List<MemberListResponse>> getMembers(@RequestBody @Valid List<MemberListRequest> memberListRequestList) {
-        List<MemberListResponse> memberListResponses = memberQueryService.getMembersListById(memberListRequestList);
+    public ResponseEntity<MemberListResponse> getMemberList(@RequestBody @Valid MemberIdNameRequest memberListRequestIdName) {
+        List<MemberIdNameResponse> memberIdNameResponseList = memberQueryService.getMembersListById(memberListRequestIdName.ids());
 
-        return ResponseEntity.ok(memberListResponses);
+        MemberListResponse memberListResponse = new MemberListResponse(memberIdNameResponseList);
+
+        return ResponseEntity.ok(memberListResponse);
     }
 
     //회원 id반환
@@ -118,6 +120,8 @@ public class MemberController {
     public ResponseEntity<MemberIdResponse> getMemberById(@RequestBody @Valid MemberEmailRequest memberEmailRequest) {
         Member member = memberQueryService.getMemberByEmail(memberEmailRequest.getEmail());
 
-        return ResponseEntity.ok(new MemberIdResponse(member.getId()));
+        MemberIdResponse memberIdResponse = new MemberIdResponse(member.getId());
+
+        return ResponseEntity.ok(memberIdResponse);
     }
 }

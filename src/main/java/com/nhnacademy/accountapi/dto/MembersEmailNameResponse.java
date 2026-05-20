@@ -1,6 +1,6 @@
 package com.nhnacademy.accountapi.dto;
 
-public record MembersResponse (
+public record MembersEmailNameResponse(
         String email,
         String name
 ){

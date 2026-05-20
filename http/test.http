@@ -8,6 +8,16 @@ Content-Type: application/json
     "name": "test1"
 }
 
+### 회원가입2 - 성공
+POST localhost:8081/api/account/signup
+Content-Type: application/json
+
+{
+  "email": "test2@test.com",
+  "password": "test1234!",
+  "name": "test2"
+}
+
 ### 회원 로그인 조회
 GET localhost:8081/api/account/account?email=test1@test.com
 
@@ -47,3 +57,19 @@ X-USER-ID: 1
 ### 회원이름반환
 GET localhost:8081/api/account/member
 X-USER-ID: 1
+
+### 회원 리스트 반환
+POST localhost:8081/api/account/members/batch
+Content-Type: application/json
+
+{
+  "ids": [1, 2]
+}
+
+### 회원 id반환
+POST localhost:8081/api/account/members/id
+Content-Type: application/json
+
+{
+  "email": "test1@test.com"
+}

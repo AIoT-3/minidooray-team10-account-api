@@ -1,7 +1,6 @@
 package com.nhnacademy.accountapi.service.impl;
 
-import com.nhnacademy.accountapi.dto.MemberListRequest;
-import com.nhnacademy.accountapi.dto.MemberListResponse;
+import com.nhnacademy.accountapi.dto.MemberIdNameResponse;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
@@ -47,14 +46,12 @@ public class MemberQueryServiceImpl implements MemberQueryService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<MemberListResponse> getMembersListById(List<MemberListRequest> memberIdList) {
-        List<Member> memberList = memberRepository.findAllById(memberIdList
-                                                                .stream().map(MemberListRequest::id)
-                                                                .toList());
+    public List<MemberIdNameResponse> getMembersListById(List<Long> memberIdList) {
+        List<Member> memberList = memberRepository.findAllById(memberIdList);
 
-        List<MemberListResponse> memberListRequests = new ArrayList<>();
+        List<MemberIdNameResponse> memberListRequests = new ArrayList<>();
         for (Member member : memberList) {
-            memberListRequests.add(new MemberListResponse(member.getId(), member.getName()));
+            memberListRequests.add(new MemberIdNameResponse(member.getId(), member.getName()));
         }
 
         return memberListRequests;
