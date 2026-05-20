@@ -19,14 +19,12 @@ public class MemberSleepScheduler {
 
     private final MemberRepository memberRepository;
 
-    @Scheduled(cron = "0 09 11 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void updateMemberStatusToSleep() {
-
         log.info("휴면 전환");
 
-//        LocalDateTime time = LocalDateTime.now().minusDays(30);
-        LocalDateTime time = LocalDateTime.now().minusSeconds(30);
+        LocalDateTime time = LocalDateTime.now().minusDays(30);
 
         List<Member> targets = memberRepository.findMembersByLastLoginAtBeforeAndStatus(time, Status.ACTIVE);
 

@@ -1,5 +1,7 @@
 package com.nhnacademy.accountapi.service.impl;
 
+import com.nhnacademy.accountapi.dto.MemberListRequest;
+import com.nhnacademy.accountapi.dto.MemberListResponse;
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.exception.ErrorCode;
 import com.nhnacademy.accountapi.exception.MemberNotFoundException;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,5 +43,20 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         }
 
         return member.get();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<MemberListResponse> getMembersListById(List<MemberListRequest> memberIdList) {
+        List<Member> memberList = memberRepository.findAllById(memberIdList
+                                                                .stream().map(MemberListRequest::id)
+                                                                .toList());
+
+        List<MemberListResponse> memberListRequests = new ArrayList<>();
+        for (Member member : memberList) {
+            memberListRequests.add(new MemberListResponse(member.getId(), member.getName()));
+        }
+
+        return memberListRequests;
     }
 }

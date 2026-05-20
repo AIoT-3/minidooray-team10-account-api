@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Validated
 @RestController
 @RequestMapping("/api/account")
@@ -101,5 +103,21 @@ public class MemberController {
         Member member = memberQueryService.getMember(memberId);
 
         return ResponseEntity.ok(new MemberNameResponse(member.getName()));
+    }
+
+    //회원 리스트 반환
+    @PostMapping("/members/batch")
+    public ResponseEntity<List<MemberListResponse>> getMembers(@RequestBody @Valid List<MemberListRequest> memberListRequestList) {
+        List<MemberListResponse> memberListResponses = memberQueryService.getMembersListById(memberListRequestList);
+
+        return ResponseEntity.ok(memberListResponses);
+    }
+
+    //회원 id반환
+    @PostMapping("/members/id")
+    public ResponseEntity<MemberIdResponse> getMemberById(@RequestBody @Valid MemberEmailRequest memberEmailRequest) {
+        Member member = memberQueryService.getMemberByEmail(memberEmailRequest.getEmail());
+
+        return ResponseEntity.ok(new MemberIdResponse(member.getId()));
     }
 }
