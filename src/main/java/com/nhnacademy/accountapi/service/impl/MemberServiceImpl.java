@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
             throw new DuplicateEmailException(ErrorCode.DUPLICATE_EMAIL);
         }
 
-        memberRepository.save(new Member(email, password, name));
+        memberRepository.save(new Member(email, passwordEncoder.encode(password), name));
     }
 
     @Transactional

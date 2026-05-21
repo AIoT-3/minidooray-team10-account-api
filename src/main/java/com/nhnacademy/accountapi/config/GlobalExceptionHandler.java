@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
     }
 
     // Body Valid Fail Exception
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
     protected ResponseEntity<ErrorResponse> handleNotValidBodyException(Exception e) {
         ErrorCode errorCode = ErrorCode.NOT_VALID_BODY;
 

@@ -2,7 +2,6 @@ package com.nhnacademy.accountapi.repository;
 
 import com.nhnacademy.accountapi.entity.Member;
 import com.nhnacademy.accountapi.entity.Status;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

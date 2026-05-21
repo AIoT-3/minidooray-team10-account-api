@@ -1,12 +1,15 @@
 package com.nhnacademy.accountapi.repository;
 
 import com.nhnacademy.accountapi.entity.Member;
+import com.nhnacademy.accountapi.entity.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,4 +65,23 @@ class MemberRepositoryTest {
         assertThat(findMember).isNotNull();
         assertThat(findMember.get().getEmail()).isEqualTo(member.getEmail());
     }
+
+    @Test
+    @DisplayName("휴면 전환 계정 찾기 테스트")
+    void findMembersByLastLoginAtBeforeAndStatusTest() {
+        member.updateLastLoginAt(LocalDateTime.now());
+        List<Member> memberList = memberRepository.findMembersByLastLoginAtBeforeAndStatus(LocalDateTime.now(), Status.ACTIVE);
+
+        assertThat(memberList.getFirst().getEmail()).isEqualTo(member.getEmail());
+    }
+
+    @Test
+    @DisplayName("이메일 상태로 계정 찾기 테스트")
+    void findMEmberByEmailAndStatusTest() {
+        Optional<Member> findMember = memberRepository.findMEmberByEmailAndStatus(member.getEmail(), Status.ACTIVE);
+
+        assertThat(findMember.get().getEmail()).isEqualTo(member.getEmail());
+        assertThat(findMember.get().getPassword()).isEqualTo(member.getPassword());
+    }
+
 }

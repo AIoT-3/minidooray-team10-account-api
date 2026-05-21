@@ -11,7 +11,6 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +27,11 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberQueryService memberQueryService;
 
-    private final PasswordEncoder passwordEncoder;
-
     //회원가입
     @PostMapping("/signup")
     public ResponseEntity<Void> createMember(@RequestBody @Valid MemberCreateRequest memberCreateRequest) {
         memberService.createMember(memberCreateRequest.email(),
-                passwordEncoder.encode(memberCreateRequest.password()),
+                memberCreateRequest.password(),
                 memberCreateRequest.name());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();

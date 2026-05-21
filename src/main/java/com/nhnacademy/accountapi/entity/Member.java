@@ -36,6 +36,15 @@ public class Member {
     private LocalDateTime lastLoginAt;
 
     public Member(String email, String password, String name) {
+
+        if (email.isEmpty() || !email.contains("@")) {
+            throw new IllegalArgumentException();
+        }
+
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         this.email = email;
         this.password = password;
         this.name = name;
@@ -46,6 +55,10 @@ public class Member {
     }
 
     public void updateName(String name) {
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+
         this.name = name;
     }
 
@@ -55,10 +68,5 @@ public class Member {
 
     public void updateLastLoginAt(LocalDateTime lastLoginAt) {
         this.lastLoginAt = lastLoginAt;
-    }
-
-    public void updatePasswordAndName(String password, String name) {
-        this.password = password;
-        this.name = name;
     }
 }

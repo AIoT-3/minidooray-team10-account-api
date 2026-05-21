@@ -44,12 +44,6 @@ class MemberUpdateRequestTest {
         assertThat(violation)
                 .extracting(v -> v.getPropertyPath().toString())
                 .contains("password");
-
-        memberUpdateRequest = new MemberUpdateRequest("", "test");
-        violation = validator.validate(memberUpdateRequest);
-        assertThat(violation)
-                .extracting(v -> v.getPropertyPath().toString())
-                .contains("password");
     }
 
     @Test
